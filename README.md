@@ -2,14 +2,14 @@
 
 This project contains PoC implementations, snippets and decision documentations to build a modern, performant and cheap Jamstack website utilizing following tools and services:
 
-:white_check_mark: Nuxt.js\
-:white_check_mark: Sanity Backend\
-:white_check_mark: Cloudflare Pages
-:white_check_mark: Cloudflare Workers\
-:white_check_mark: Github\
-:white_check_mark: Plausible Analytics\
-:white_check_mark: Formspark\
-:white_check_mark: Uptime Robot
+:white_check_mark:  Nuxt.js\
+:white_check_mark:  Sanity Backend\
+:white_check_mark:  Cloudflare Pages\
+:white_check_mark:  Cloudflare Workers\
+:white_check_mark:  Github\
+:white_check_mark:  Plausible Analytics\
+:white_check_mark:  Formspark\
+:white_check_mark:  Uptime Robot
 
 The list above enables following features:
 
@@ -20,7 +20,7 @@ Nuxt provides some stunning features and tops this all with static generation an
 In case a bot accesses the website without a `accept-language` header, like the Google bot does, a redirection to the fallback language should be triggered. This case also requires possible redirections without JS on the client side.
 
 Example:
-`https://www.example.com` :arrow_right: `https://www.example.com/en`
+`https://www.example.com`  :arrow_right:  `https://www.example.com/en`
 
 ### Redirection of Users
 In case a user accesses the website, the preferred browser language should be evaluated and the user should be redirected to the correct content. Once a language is served or the user changes the language, a cookie should save the default language for future accesses.
@@ -31,7 +31,7 @@ A little bit more hard is the redirection to a subfolder when no language is spe
 
 Cloudflare doesn't support language redirection to date [docs](https://developers.cloudflare.com/pages/platform/redirects) (accessed 31.08.2021).
 
-For Cookie parsing and language detection [resolve-accept-language](https://www.npmjs.com/package/resolve-accept-language) and [cookie] (https://www.npmjs.com/package/cookie) are used.
+For Cookie parsing and language detection [resolve-accept-language](https://www.npmjs.com/package/resolve-accept-language) and [cookie](https://www.npmjs.com/package/cookie) are used.
 
 ### Translation
 API connection is missing yet and only static translation is present like [here](https://github.com/paulgv/nuxt-i18n-example/blob/master/config/index.js) or [here](https://github.com/miteyema/nuxt-i18n-demo/blob/prod/nuxt.config.js).
@@ -56,16 +56,16 @@ There are several free and paid services like fathom analytics or Cloudflare ana
 For hosting, Plausible analytics also provides a guide for using Cloudflare workers and the caching API [here](https://plausible.io/docs/proxy/guides/cloudflare).
  
 ### Pricing
-Netlify:
-- 100GB bandwidth\
-- 125.000 functions\
-- 300m build\
+#### Netlify:
+- 100GB bandwidth
+- 125.000 functions
+- 300m build
 - unlimited scripts/domain
 
-Cloudflare:
-- unlimited bandwidth for Cloudflare Pages\
-- 500m build minutes for Cloudflare Pages\
-- 100.000 bounded functions a day for Cloudflare Workers\
+#### Cloudflare:
+- unlimited bandwidth for Cloudflare Pages
+- 500m build minutes for Cloudflare Pages
+- 100.000 bounded functions a day for Cloudflare Workers
 - 5GB for unbounded functions (CPU time >10ms)
 - 30 scripts/domain
 
@@ -94,9 +94,7 @@ The Nuxt app from this repo was deployed on Cloudflare and Netlify and the measu
 - Cloudflare pages cold (after 10min): 70ms
 - Cloudlare pages hot: 70ms
 
-\
-\
-\
+
 ## Build Setup from original Nuxt i18n demo template
 
 ```bash

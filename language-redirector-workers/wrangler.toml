@@ -2,5 +2,7 @@ name = "language-redirector"
 type = "webpack"
 account_id = "***REMOVED***"
 workers_dev = true
+
+[env.production]
 route = "***REMOVED***"
 zone_id = "***REMOVED***"
