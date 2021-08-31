@@ -61,6 +61,7 @@ For hosting, Plausible analytics also provides a guide for using Cloudflare work
 - 125.000 functions
 - 300m build
 - unlimited scripts/domain
+- static files/storage max. 100GB
 
 #### Cloudflare:
 - unlimited bandwidth for Cloudflare Pages
@@ -68,6 +69,7 @@ For hosting, Plausible analytics also provides a guide for using Cloudflare work
 - 100.000 bounded functions a day for Cloudflare Workers
 - 5GB for unbounded functions (CPU time >10ms)
 - 30 scripts/domain
+- static files/storage of max. 20.000 files and max. 25MB/file
 
 ### Redirection
 Cloudflare has 2 options for redirecting and enforcing HTTPS everywhere und SSL/TLS and EDGE certificates like [here](https://blog.cloudflare.com/how-to-make-your-site-https-only/) and at the bottom is a option for rewriting images etc. also.
