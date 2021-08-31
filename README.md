@@ -84,16 +84,17 @@ After testing this out, it is necessary to cleanup Github, Netlify, Cloudlfare u
 ### Tests
 The Nuxt app from this repo was deployed on Cloudflare and Netlify and the measurements were taken manually using the Chrome network tab and approximated using 3-4 page refreshes.
 
-- Netlify functions redirect from root domain cold (after 10min): 630ms 
+- Netlify functions redirect from root domain cold (after 10min): 600ms 
 - Netlify functions redirect from root domain hot: 150ms
-- Netlify static cold (after 10min): 350ms
+- Netlify static cold (after 10min): 400ms
 - Netlify static hot: 50ms
 
-- Cloudflare workers redirect from root domain cold (after 10min): 70ms
+- Cloudflare workers redirect from root domain cold (after 10min): 150ms
 - Cloudflare workers redirect from root domain hot: 70ms
-- Cloudflare pages cold (after 10min): 70ms
+- Cloudflare pages cold (after 10min): 90ms
 - Cloudlare pages hot: 70ms
 
+Another test came to the result that both providers have approximately the same response times so it looks like the only difference is the free limits.
 
 ## Build Setup from original Nuxt i18n demo template
 
