@@ -1,7 +1,0 @@
-name = "my-worker-with-router"
-type = "webpack"
-
-account_id = "***REMOVED***"
-workers_dev = true
-#route = ""
-#zone_id = ""

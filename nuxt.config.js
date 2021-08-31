@@ -106,7 +106,11 @@ export default {
   },
 
   generate: {
-    // No trailing slashes for static hosting
+    // Important for static hosting with i18n to produce
+    // en.html files etc. so there is no trailing slash
+    // when provided via simple services like apache
     subFolders: false,
+    // TODO: maybe we need some routes here like in https://github.com/miteyema/nuxt-i18n-demo/blob/prod/nuxt.config.js#L132
+    //  to overcome relative API calls
   }
 }

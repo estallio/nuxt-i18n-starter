@@ -1,0 +1,6 @@
+name = "language-redirector"
+type = "webpack"
+account_id = "***REMOVED***"
+workers_dev = true
+route = "***REMOVED***"
+zone_id = "***REMOVED***"
