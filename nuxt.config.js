@@ -78,8 +78,6 @@ export default {
         }
       }
     },
-    // Netlify will do the language detection
-    detectBrowserLanguage: false,
     seo: true,
   },
 
