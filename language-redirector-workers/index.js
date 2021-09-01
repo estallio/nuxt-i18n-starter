@@ -5,15 +5,8 @@ import acceptLanguageParser from 'accept-language-parser'
 // internal imports
 import config from './config'
 
-/*
-* Important to notice: this worker script is very general and only redirects to
-* relative language paths like '/de' and not to 'https://www.example.com/de'.
-* For this reason, it is crucial to only redirect single entrypoints like
-* 'https://www.example.com/'. This means the worker should only listen on this
-* single address and not 'https://www.example.com/*' as else the worker would
-* forward itself and and endless loop of redirections like this occur:
-* https://www.example.com/de/de/de/de/de/de/de....
-* */
+const supportedLocalesMatcherString = $`^\/(${config.supportedLanguages.concat(config.staticFolders ?? []).join('|')})(\/.*)?$`
+const supportedLocalesMatcher = new RegExp(supportedLocalesMatcherString)
 
 // root entrypoint of worker
 addEventListener('fetch', event => {
@@ -24,7 +17,7 @@ async function handleRequest(request) {
   // request url that should be forwarded
   const url = new URL(request.url)
 
-  if (url.pathname && url.pathname.match(/^\/(en|de)(\/*$|$)/)) {
+  if (url.pathname && url.pathname.match(supportedLocalesMatcher)) {
     return await fetch(request)
   }
 

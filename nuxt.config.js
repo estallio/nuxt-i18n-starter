@@ -57,17 +57,68 @@ export default {
 
 
   // Global page headers: https://go.nuxtjs.dev/config-head
-  head: {
+  head () {
+    if (!this.$nuxtI18nHead) {
+      return {
+        htmlAttrs: {
+          myAttribute: 'My Value',
+        },
+        meta: [
+          { charset: 'utf-8' },
+          { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+          { hid: 'description', name: 'description', content: '' },
+          { name: 'format-detection', content: 'telephone=no' },
+          {
+            hid: 'description',
+            name: 'description',
+            content: 'My Custom Description'
+          },
+        ],
+        link: [
+          { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+          {
+            hid: 'apple-touch-icon',
+            rel: 'apple-touch-icon',
+            sizes: '180x180',
+            href: '/apple-touch-icon.png'
+          },
+        ],
+        title: 'nuxt-i18n-test',
+      }
+    }
+
+    // TODO: canonical not correct
+
+    const i18nHead = this.$nuxtI18nHead({ addSeoAttributes: true })
+    return {
+      htmlAttrs: {
+        myAttribute: 'My Value',
+      ...i18nHead.htmlAttrs
+      },
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { hid: 'description', name: 'description', content: '' },
+        { name: 'format-detection', content: 'telephone=no' },
+        {
+          hid: 'description',
+          name: 'description',
+          content: 'My Custom Description'
+        },
+        ...i18nHead.meta
+      ],
+        link: [
+          { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        {
+          hid: 'apple-touch-icon',
+          rel: 'apple-touch-icon',
+          sizes: '180x180',
+          href: '/apple-touch-icon.png'
+        },
+        ...i18nHead.link
+      ],
     title: 'nuxt-i18n-test',
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
-      { name: 'format-detection', content: 'telephone=no' }
-    ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    }
   },
 
   i18n: {
