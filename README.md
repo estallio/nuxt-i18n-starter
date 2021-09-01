@@ -71,6 +71,8 @@ For hosting, Plausible analytics also provides a guide for using Cloudflare work
 - 30 scripts/domain
 - static files/storage of max. 20.000 files and max. 25MB/file
 
+[Here](https://brianli.com/migrating-from-netlify-to-cloudflare-workers-sites-for-2x-performance/) and [here](https://zhauniarovich.com/post/2021/2021-07-comparing-netlify-and-cloudflare-pages/) and some fancy idea to implement Cloudflare's KV storage is documented [here](https://brianli.com/how-to-bulk-redirect-urls-with-cloudflare-workers-and-workers-kv/).
+
 ### Redirection
 Cloudflare has 2 options for redirecting and enforcing HTTPS everywhere und SSL/TLS and EDGE certificates like [here](https://blog.cloudflare.com/how-to-make-your-site-https-only/) and at the bottom is a option for rewriting images etc. also.
 
