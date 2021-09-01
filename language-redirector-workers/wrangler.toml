@@ -4,9 +4,5 @@ account_id = "***REMOVED***"
 workers_dev = true
 
 [env.production]
-route = "***REMOVED****"
+route = "***REMOVED***"
 zone_id = "***REMOVED***"
-
-[site]
-bucket = "./static-page"
-entry-point = "./workers-site"
