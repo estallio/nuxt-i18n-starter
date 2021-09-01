@@ -83,7 +83,8 @@ export default {
     ],
     // redirection is not working when started with yarn start
     // actually, this should be 'prefix' only, but the community decided against this behaviour: https://github.com/nuxt-community/sitemap-module/issues/91#issuecomment-613719069
-    strategy: 'prefix',
+    strategy: 'prefix_and_default',
+    defaultLocaleRouteNameSuffix: 'de',
     defaultLocale: 'de',
     vueI18n: {
       fallbackLocale: 'de',
@@ -103,7 +104,7 @@ export default {
 
   sitemap: {
     hostname: config.hostname,
-    i18n: true,
+    i18n: true
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
@@ -124,7 +125,7 @@ export default {
     // Important for static hosting with i18n to produce
     // en.html files etc. so there is no trailing slash
     // when provided via simple services like apache
-    // subFolders: false,
+    subFolders: false,
     // TODO: maybe we need some routes here like in https://github.com/miteyema/nuxt-i18n-demo/blob/prod/nuxt.config.js#L132
     //  to overcome relative API calls
   }
