@@ -1,6 +1,7 @@
 // external imports
 import { parse } from 'cookie'
 import acceptLanguageParser from 'accept-language-parser'
+import { getAssetFromKV } from '@cloudflare/kv-asset-handler'
 
 // internal imports
 import config from './config'
@@ -10,10 +11,21 @@ const supportedLocalesMatcher = new RegExp(supportedLocalesMatcherString)
 
 // root entrypoint of worker
 addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request))
+  event.respondWith(handleRequest(event))
 })
 
-async function handleRequest(request) {
+async function handleRequest(event) {
+  try {
+    return await getAssetFromKV(event)
+  } catch (e) {
+    let pathname = new URL(event.request.url).pathname
+    return new Response(`"${pathname}" not found`, {
+      status: 404,
+      statusText: "not found",
+    })
+  }
+
+  /*
   // request url that should be forwarded
   const url = new URL(request.url)
 
@@ -50,6 +62,7 @@ async function handleRequest(request) {
 
   // respond with the accept-language value
   return Response.redirect(url + '/' + lang, 302)
+  */
 }
 
 
