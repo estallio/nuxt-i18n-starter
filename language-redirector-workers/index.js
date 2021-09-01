@@ -20,9 +20,13 @@ addEventListener('fetch', event => {
   event.respondWith(handleRequest(event.request))
 })
 
-function handleRequest(request) {
+async function handleRequest(request) {
   // request url that should be forwarded
   const url = new URL(request.url)
+
+  if (url.pathname && url.pathname.match(/^\/(en|de)(\/*$|$)/)) {
+    return await fetch(request)
+  }
 
   ////////
   // case 1: cookie is set
