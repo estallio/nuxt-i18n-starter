@@ -83,7 +83,7 @@ export default {
     ],
     // redirection is not working when started with yarn start
     // actually, this should be 'prefix' only, but the community decided against this behaviour: https://github.com/nuxt-community/sitemap-module/issues/91#issuecomment-613719069
-    strategy: 'prefix_and_default',
+    strategy: 'prefix',
     defaultLocale: 'de',
     vueI18n: {
       fallbackLocale: 'de',
