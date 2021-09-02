@@ -1,18 +1,20 @@
-// external imports
 import { parse } from 'cookie'
 import acceptLanguageParser from 'accept-language-parser'
 
-// internal imports
-import config from './config'
-
-// root entrypoint of worker
 addEventListener('fetch', event => {
-  event.respondWith(handleRequest(event.request))
+  event.respondWith(handleRequest(event))
 })
 
-async function handleRequest(request) {
-  // request url that should be forwarded
-  const url = new URL(request.url)
+async function handleRequest(event) {
+  const target = new URL(event.request.url)
+  const redirect = await REDIRECTS.get(target.toString())
+
+  ***REMOVED***/ -> hit
+  ***REMOVED***/about -> hit
+
+  cookieName: 'i18n_redirected'
+  supportedLanguages: ['de', 'en']
+  defaultLanguage: 'de'
 
   ////////
   // case 1: cookie is set
@@ -22,11 +24,11 @@ async function handleRequest(request) {
   const cookies = parse(request.headers.get('Cookie') || '')
 
   // check if cookie (key in the cookies object) exists
-  if (cookies[config.cookieName] !== null) {
+  if (cookies[cookieName] !== null) {
     // check if language is supported
-    if(config.supportedLanguages.includes(cookies[config.cookieName])) {
+    if(supportedLanguages.includes(cookies[cookieName])) {
       // respond with the cookie value
-      return Response.redirect(url + '/' + cookies[config.cookieName], 302)
+      return Response.redirect(url + '/' + cookies[cookieName], 302)
     }
   }
 
@@ -36,13 +38,15 @@ async function handleRequest(request) {
 
   // get the favorite supported language from header - could return null
   const lang = acceptLanguageParser.pick(
-    config.supportedLanguages,
-    request.headers.get('Accept-Language') || '',
+    supportedLanguages,
+    event.request.headers.get('Accept-Language') || '',
     { loose: true }
-    ) || config.defaultLanguage
+    ) || defaultLanguage
 
   // respond with the accept-language value
-  return Response.redirect(url + '/' + lang, 302)
+  return Response.redirect(target + '/' + lang, 302)
+
+  // TODO: regular fetch
 }
 
 

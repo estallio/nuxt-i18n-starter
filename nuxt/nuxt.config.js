@@ -133,8 +133,8 @@ export default {
       }
     ],
     // redirection is not working when started with yarn start
-    strategy: 'prefix_and_default',
-    defaultLocale: 'de',
+    strategy: 'prefix',
+    defaultLocale: 'en',
     vueI18n: {
       fallbackLocale: 'de',
       messages: {
@@ -173,7 +173,6 @@ export default {
   },
 
   generate: {
-    nojekyll: false,
     // Important for static hosting with i18n to produce
     // en.html files etc. so there is no trailing slash
     // when provided via simple services like apache

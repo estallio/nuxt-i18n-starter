@@ -1,0 +1,8 @@
+name = "language-redirector"
+type = "webpack"
+account_id = "***REMOVED***"
+workers_dev = true
+
+kv_namespaces = [
+    { binding = "REDIRECTS", preview_id = "b848601d036c41a39dd9a030c074b52b", id = "12aff7a859cc4ce1b740dd8a9e507d79" }
+]
