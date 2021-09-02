@@ -30,7 +30,9 @@ export default {
     // https://go.nuxtjs.dev/tailwindcss
     '@nuxtjs/tailwindcss',
     // https://sanity.nuxtjs.org
-    '@nuxtjs/sanity/module'
+    '@nuxtjs/sanity/module',
+    // https://github.com/moritzsternemann/vue-plausible
+    'vue-plausible'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -38,8 +40,13 @@ export default {
     '@nuxtjs/i18n',
     '@nuxtjs/pwa',
     '@nuxtjs/robots',
-    '@nuxtjs/sitemap',
+    '@nuxtjs/sitemap'
   ],
+
+  plausible: {
+    domain: '***REMOVED***',
+    apiHost: '***REMOVED***plausible'
+  },
 
   // https://github.com/nuxt-community/robots-module
   robots: {
@@ -147,7 +154,7 @@ export default {
       }
     },
     seo: true,
-    baseUrl: config.hostname
+    baseUrl: config.hostname,
     // also custom links are possible
   },
 

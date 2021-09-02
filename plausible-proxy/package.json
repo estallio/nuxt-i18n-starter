@@ -1,11 +1,10 @@
 {
-  "name": "language-redirector",
+  "name": "plausible-proxy",
   "private": true,
   "version": "1.0.0",
-  "description": "package for creating workers templates",
+  "description": "proxying plausible requests",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "format": "prettier --write '**/*.{js,css,json,md}'",
     "deploy": "wrangler publish"
   },
@@ -16,8 +15,5 @@
     "prettier": "^1.17.0"
   },
   "dependencies": {
-    "@cloudflare/kv-asset-handler": "^0.1.3",
-    "accept-language-parser": "^1.5.0",
-    "cookie": "^0.4.1"
   }
 }

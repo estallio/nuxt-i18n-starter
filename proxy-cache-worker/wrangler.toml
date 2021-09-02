@@ -1,8 +1,0 @@
-name = "proxy-chache"
-type = "webpack"
-account_id = "***REMOVED***"
-workers_dev = true
-
-kv_namespaces = [
-    { binding = "PROXY_CACHE_MAP", preview_id = "***REMOVED***", id = "***REMOVED***" }
-]
