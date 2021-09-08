@@ -1,5 +1,5 @@
 {
-  "name": "nuxt-i18n-test",
+  "name": "nuxt-i18n-starter",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -8,6 +8,7 @@
     "start": "nuxt start",
     "generate": "nuxt generate && rm -f ./dist/.nojekyll",
     "deploy": "yarn generate",
+    "format": "prettier --write '**/*.{js,css,json,md}'",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint:style": "stylelint \"**/*.{vue,css}\" --ignore-path .gitignore",
     "lint": "yarn lint:js && yarn lint:style"
