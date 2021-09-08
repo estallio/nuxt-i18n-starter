@@ -138,15 +138,21 @@ After testing this out, it is necessary to cleanup Github, Netlify, Cloudlfare u
 
 The Nuxt app from this repo was deployed on Cloudflare and Netlify and the measurements were taken manually using the Chrome network tab and approximated using 3-4 page refreshes.
 
+#### Netlify:
+
 - Netlify functions redirect from root domain cold (after 10min): 600ms
 - Netlify functions redirect from root domain hot: 150ms
 - Netlify static cold (after 10min): 400ms
 - Netlify static hot: 50ms
 
-- Cloudflare workers redirect from root domain cold (after 10min): 150ms
-- Cloudflare workers redirect from root domain hot: 70ms
-- Cloudflare pages cold (after 10min): 90ms
-- Cloudlare pages hot: 70ms
+#### Cloudflare:
+
+- Cloudflare Workers redirect from root domain cold (after 10min): 150ms
+- Cloudflare Workers redirect from root domain hot: 70ms
+- Cloudflare Pages cold (after 10min): 90ms
+- Cloudlare Pages hot: 70ms
+
+#### Vercel:
 
 - Vercel had cold boot times of up to 2s, page generation is most likely cached and can be accessed in 200-600ms which is still slower than the other provider
 
