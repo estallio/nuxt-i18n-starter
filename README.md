@@ -2,18 +2,18 @@
 
 This project contains PoC implementations, snippets and decision documentations to build a modern, performant and cheap Jamstack website utilizing the following tools and services:
 
-:white_check_mark:  NuxtJS\
-:white_check_mark:  Sanity.io\
-:white_check_mark:  Cloudflare Pages\
-:white_check_mark:  Cloudflare Workers\
-:white_check_mark:  Github\
-:white_check_mark:  Plausible Analytics\
-:white_check_mark:  Formspark
+- :white_check_mark: NuxtJS\
+- :white_check_mark: Sanity.io\
+- :white_check_mark: Cloudflare Pages\
+- :white_check_mark: Cloudflare Workers\
+- :white_check_mark: Github\
+- :white_check_mark: Plausible Analytics\
+- :white_check_mark: Formspark
 
-### Static hosting
+## Static hosting
 Nuxt provides some stunning features and tops this all with static generation and especially simple content previews like documented in [this strapi tutorial](https://strapi.io/blog/implementing-previews-with-nuxt-applications-using-a-strapi-backend) and [this sanity tutorial](https://dev.to/mornir/how-to-handle-content-previews-from-sanity-in-nuxt-3127). A combining tutorial from Cloudflare on how to use Sanity and Nuxt to host static websites on Cloudflare pages can be viewed [here](https://developers.cloudflare.com/pages/tutorials/build-a-blog-using-nuxt-and-sanity). The center of this approach is a static prerendered website that is able to load content from a CMS dynamically. The advantage is to deliver fast and static websites that are also compatible to search engines that don't execute JS. The Vue Framework makes it possible to replace static functionality and replace it by SPA (single page applications) behaviour. New or changed content can be previewed in this mode and new pages can be accessed utilizing the client side Vue router. The focus of this project is on the regular user and the impression a regular user gets from the website. The content editor on the other hand is expected to own a regular to modern device that is able to render SPAs for editing and previewing content. This way, a regular website user gets the best experience. Additionally, Nuxt comes with a big developer community and helpful plugins for [`i18n`](https://i18n.nuxtjs.org/), [`sitemap generation`](https://sitemap.nuxtjs.org/), `robots generation`, `cms integration like sanity` and `SEO`.
 
-##### Some other nice faetures of Nuxt:
+#### Some other nice faetures of Nuxt:
 - Live Preview simply calls the nuxtServerInit, asyncData and fetch on the client side again ([link](https://nuxtjs.org/docs/2.x/features/live-preview)).
 - [`extendRoutes`](https://nuxtjs.org/docs/2.x/features/file-system-routing#extendroutes) can be used to integrate routes that are not resolved by the file/folder startegy.
 - [`subFolders`](https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-generate#subfolders) is useful to get URLs in Cloudflare Pages that don't have an extra `/` at the end without an additional proxy etc.
@@ -22,13 +22,13 @@ Nuxt provides some stunning features and tops this all with static generation an
 - All the routes can be specified with the [`routes`](https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-generate#speeding-up-dynamic-route-generation-with-payload) property.
 - Nuxt has some cool data fetching startegies built in like [this](https://nuxtjs.org/docs/2.x/features/data-fetching#async-data)
 
-##### Hosting:
+#### Hosting:
 To know how Cloudflare pages handles `404s`, `SPAs` or how they redirect requests etc. look at the [Cloudflare docs](https://developers.cloudflare.com/pages/platform/serving-pages). An alternative to Cloudflare pages are Cloudflare Worker Sites [here](https://developers.cloudflare.com/workers/platform/sites/configuration). This is most likely the same technique like it is used in Cloudflare Pages, but it is directly integrated in the related Workers KV store.
 
-### Redirection of Google bot and others
+## Redirection of Google bot and others
 When using multilingual websites, the main domain often redirects `https://example.com` to the subpaths like `https://example.com/en`. The Nuxt i18n plugin takes care of this when the app is used in serverless environments or served as SPA. That means, when served statically, a search engine is not redirected and additional server logic is necessary for this behavior. In case a bot accesses the website without a `accept-language` header, like the Google bot does, a redirection to the fallback language should be triggered. This case also requires possible redirections without JS on the client side. To come around this issue, the Cloudflare Worker in the `language-redirector` folder takes care of this redirection - more can be read in the README [here](/language-redirector/README.md). If one is fine with paying 20€/month, also Vercel looks good for the job, even if one should take care of possible cold starts of the redirection functions. This means the static content on Vercel is cached on the edge, but the redirection functionality is outsourced to a lambda function on e.g. AWS that could take up to 2s to get into the hot status if not called regularily.
 
-#### Related:
+### Related:
 - In [this comment](https://github.com/nuxt-community/i18n-module/issues/761#issuecomment-645357443) on an issue of the next-community i18n module is explained how pages should be generated and the sitemap entry or head parts like `<link rel="alternative"...` should use the `x-default` property. Additionally, the problem with the generation startegy `prefix_and_default` of Nuxt is taken into account here as the root direction works only with Nuxt SSR or in the browser client via Vue router and not while using SSG for bots.
 - If Nuxt build stategy is `prefiy_and_default`, one version should be marked as canonical like stated in the Google docs [here](https://developers.google.com/search/docs/advanced/crawling/managing-multi-regional-sites?hl=de#dup-content). The default locale will also be generated when `defaultLocale` is beeing set.
 - To not generate unprefixed routes, simply skip the `defaultLocale` property, but be aware that this property is also used at other places and maybe some things won't work. The desired behaviour is to let the default route generate it's file and redirect them with the redirect-language worker in this repo ([Github issue](https://github.com/nuxt-community/i18n-module/issues/1158)).
@@ -37,12 +37,13 @@ When using multilingual websites, the main domain often redirects `https://examp
 - Generating multilingual sitemaps does not work as expected when using stategy `prefix`. The first issue [here](https://github.com/nuxt-community/sitemap-module/issues/91#issue-536500201) describes what should be generated, but [this](https://github.com/nuxt-community/sitemap-module/issues/91#issuecomment-613719069) comment in the same issue pushed through and a differen sitemap generation behavior was implemented. The desired behavior can be found in code [here](https://github.com/nuxt-community/sitemap-module/blob/c3acdbddc01e0ff115eb3d6ef7ae33673b32323c/lib/builder.js#L59) where all unlocalized paths are returned and not taken into account by the `x-default` property. The problem is, that the URLs are included in the sitemap file in either way and logically, each URL should have some meta-properties or none. To overcome this, the sitemap generation was overwritten in the Nuxt config file of this project.
 - Nuxt PWA generation is not supported for multilingual websites like state [here](https://github.com/nuxt-community/pwa-module/issues/312)
 - If the locales are completely different sites, one should think about splitting the pages into different generated websites
-- The dynamic routes generation features of the i18n module works like this: somewhere in the file or config or on a page there is a link to a dynamic page. Assume we specified the routes without the languages in the routes property in the config file. Then, when a defaultLocale route is generated, all the translated slugs have to be set via the technique specified [here](https://i18n.nuxtjs.org/lang-switcher#dynamic-route-parameters). On every page that has a translated version, all translated versions have to be specified with this technique. To better understand this: assume a translated page is rendered this way, then this page must generate it's content only with the translated slug name it was called. Afterwards, the page has to call the other translated slugs with the technique from before. Nuxt won't genreate these localized slugs as they are already present in the generation cache but every localized site needs all the other localized slugs in their asyncData method. Associated with this feature are the dynamic lang generation in the code [here](https://github.com/njam/nuxt-i18n-module/blob/5e3b6ffad886b44a0546b46febd2803377bba147/src/index.js#L51). Another [Github issue](https://github.com/nuxt-community/i18n-module/issues/1127) specifies again how the dynamic route generation works. In the code, [this](https://github.com/nuxt-community/i18n-module/blob/67c84078f2e7c1d3f502140645f88fc652912227/src/templates/plugin.utils.js#L162) line shows where the action is triggered at the store. A test implementation for dynamic i18n slug generation of this repo can be found [here](https://github.com/estallio/nuxt-i18n-test/tree/dynamic-i18n-slugs/nuxt).
+- The dynamic routes generation features of the i18n module works like this: somewhere in the file or config or on a page there is a link to a dynamic page. Assume we specified the routes without the languages in the routes property in the config file. Then, when a defaultLocale route is generated, all the translated slugs have to be set via the technique specified [here](https://i18n.nuxtjs.org/lang-switcher#dynamic-route-parameters). On every page that has a translated version, all translated versions have to be specified with this technique. To better understand this: assume a translated page is rendered this way, then this page must generate it's content only with the translated slug name it was called. Afterwards, the page has to call the other translated slugs with the technique from before. Nuxt won't genreate these localized slugs as they are already present in the generation cache but every localized site needs all the other localized slugs in their asyncData method. Associated with this feature are the dynamic lang generation in the code [here](https://github.com/njam/nuxt-i18n-module/blob/5e3b6ffad886b44a0546b46febd2803377bba147/src/index.js#L51). Another [Github issue](https://github.com/nuxt-community/i18n-module/issues/1127) specifies again how the dynamic route generation works. In the code, [this](https://github.com/nuxt-community/i18n-module/blob/67c84078f2e7c1d3f502140645f88fc652912227/src/templates/plugin.utils.js#L162) line shows where the action is triggered at the store. A test implementation for dynamic i18n slug generation of this repo can be found [here](https://github.com/estallio/nuxt-i18n-test/tree/dynamic-i18n-slugs/nuxt). Another example how to generate translated slugs using Storyblock is described [here](https://www.storyblok.com/tp/nuxtjs-translated-slugs).
+- [This](https://github.com/paulgv/nuxt-i18n-example/blob/master/config/index.js#L26) shows an example if also the part in front of the dynamic i18n slug should be translated when generating dynamic i18n slugs.
 - Sitemap generation does not work with dynamic localized slugs, as a workaround, one can specify the routes themselves like [here](https://github.com/nuxt-community/sitemap-module/issues/122#issuecomment-659377003)
 - The slug of static generated files form the file system can not be translated dynamically with `nuxtI18n` [here](https://github.com/nuxt-community/i18n-module/issues/1275). Maybe this works with specifying the component/template in the routes property of the Nuxt config and fetch the localized slugs there.
 
 
-### Redirection of Users
+## Redirection of Users
 In case a user accesses the website, the preferred browser language should be evaluated and the user should be redirected to the correct content. Once a language is served or the user changes the language, a cookie should save the default language for future accesses.
 
 Even Netlify already provides a language redirection feature ([Netlify documentation](https://docs.netlify.com/routing/redirects/redirect-options/#redirect-by-country-or-language)). For the second case Netlify only give the possibility to redirect on Cookie presence and not on Cookie absence or Cookie value. Additionally, the language redirection seems to have some bugs or doesn't implement the full `accept-language` RFC features ([link to Netlify forum](https://answers.netlify.com/t/do-language-based-redirects-take-into-account-browsers-language/2577/33]). A workaround with Netlify can be seen [here](https://github.com/estallio/netlify-functions-test/tree/netlify-test). The solution was to redirect the root domain to a lambda function if the Cookie was present and parse the Cookie there before the redirect happens. Because of the buggy language redirect of Netlify, a conditional header redirection for `Cookie` or `Accept-Language` in the header would be the choice to go.
@@ -53,31 +54,31 @@ Additionally, Cloudflare doesn't support language redirection to date [docs](htt
 
 For Cookie parsing and language detection [resolve-accept-language](https://www.npmjs.com/package/resolve-accept-language) and [cookie](https://www.npmjs.com/package/cookie) are used.
 
-### Translation
+## Translation
 API connection is missing yet and only static translation is present like [here](https://github.com/paulgv/nuxt-i18n-example/blob/master/config/index.js) or [here](https://github.com/miteyema/nuxt-i18n-demo/blob/prod/nuxt.config.js).
 
-### CDN rewrites
+## CDN rewrites
 Is possible using Cloudflare workers similar to [this cloudflare proxy](https://github.com/wesbos/cloudflare-cloudinary-proxy/blob/master/index.js) utilizing the Cloudinary CDN. This can also smaller the CDN quotas of services like Cloudinary etc.. The `plausible-proxy` folder in this repo already contains a caching algorithm for the plausible files. This can simply be used to cache and redirect files from e.g. the Sanity CDN. A test showed that the Cloudflare cache as middleware takes up to twice as long as Sanity's CDN does (100ms on cache hit instead of 50ms, 250ms on cache miss). So go with Sanity if possible and only migrate to Cloudflare if you don't want to pay the peanuts additional Sanity quotas costs.
 
-### Cloudflare Pages Sanity Studio integration
+## Cloudflare Pages Sanity Studio integration
 This is necessary to let the users trigger SSG processes when content has changed. For this, a rewrite of already existing plugins can be done and a simple change of the endpoints to Cloudflare can already fulfill the task. Examples are [Netlify Deploy](https://www.sanity.io/plugins/sanity-plugin-dashboard-widget-netlify), [sanity-plugin-netlify-deploy-status-badge](https://www.sanity.io/plugins/netlify-deploy-status-badge), [Vercel Dashboard Widget (for Sanity)](https://www.sanity.io/plugins/vercel-dashboard-widget) and [Vercel Deploy](https://www.sanity.io/plugins/vercel-deploy). In this project, [Vercel Deploy](https://www.sanity.io/plugins/vercel-deploy) was used as basis to create the plugin that is present in the `cloudflare-pages-sanity-plugin` folder in this repo. Maybe a few bugs are still present but in sum, all the functionalities of `Vercel Deploy` have been reconstructed in this module. Tutorials for generating own plugins can be found [here](https://www.sanity.io/docs/plugin-custom-logo) and [here](https://www.dorelljames.com/blog/creating-my-first-sanity-io-plugin/).
 
 The Cloudflare API was a little harder to implement because their API endpoint can only handle access with email and api-key, not via an access token. This is only possible for things like publish worker scripts or manage domains, not for managing Cloudflare Pages at the moment ([Cloudflare Pages API docs](https://developers.cloudflare.com/pages/platform/api)). Another problem is, that the Cloudflare API does not specify CORS in their header. A community forum entry simply states something like "you should implement the API in programs, not in the browser etc...". A solution is to proxy requests to Cloudflare via workers like [here](https://developers.cloudflare.com/workers/examples/cors-header-proxy). This worker is also contained in this project [here](/cloudflare-api-proxy/README.md). 
 
-### Other known Sanity bugs
+## Other known Sanity bugs
 - [ ] Sanity backend is not translated: [issue](https://github.com/sanity-io/sanity/issues/1603)
 - [ ] Sanity is beeing blocked by Safari ([issue](https://github.com/sanity-io/sanity/issues/1231)) and Brave([issue](https://github.com/sanity-io/sanity/issues/1768)).
 
-### Deployment
+## Deployment
 Important steps to mention here:
 - Nuxt suggests [these things](https://nuxtjs.org/docs/2.x/deployment/deployment-cloudflare) when deployed with Cloudflare ([here](https://nuxtjs.org/docs/2.x/deployment/netlify-deployment) are the Netlify deployment instructions). On Vecel, the app can be deployed rather as SSR or SSG page.
 
-### Analytics
+## Analytics
 There are several free and paid services like fathom analytics or Cloudflare analytics. Plausible analytics looked best and compared to other services, it's cheap or has some other advantages like described [here](https://plausible.io/vs-cloudflare-web-analytics).
 
 For hosting, Plausible analytics also provides a guide for using Cloudflare workers and the caching API [here](https://plausible.io/docs/proxy/guides/cloudflare) - the worker script is included in this repo.
  
-### Pricing
+## Pricing
 #### Netlify:
 - 100GB bandwidth
 - 125.000 functions
@@ -101,20 +102,20 @@ For hosting, Plausible analytics also provides a guide for using Cloudflare work
 
 [Here](https://brianli.com/migrating-from-netlify-to-cloudflare-workers-sites-for-2x-performance/) and [here](https://zhauniarovich.com/post/2021/2021-07-comparing-netlify-and-cloudflare-pages/) and some fancy idea to implement Cloudflare's KV storage is documented [here](https://brianli.com/how-to-bulk-redirect-urls-with-cloudflare-workers-and-workers-kv/).
 
-### Redirection
+## Redirection
 Cloudflare has 2 options for redirecting and enforcing HTTPS everywhere und SSL/TLS and EDGE certificates like [here](https://blog.cloudflare.com/how-to-make-your-site-https-only/) and at the bottom is a option for rewriting images etc. also.
 
 To redirect non-www to www 1 of 3 free page rules can be used like [here](https://community.cloudflare.com/t/redirect-example-com-to-www-example-com/78348). On Netlify, these rules are easy to specify and free to use, but on the other side, the behaviour can easily be mimicked by Cloudflare Workers.
 
-### SSR
+## SSR
 Cloudflare workers have strong time constrains so if SSR is required, the unbounded functions could help out. Same as using Netlify, the NodeJS API is not available natively and a workaround like [here](https://www.netlify.com/blog/2018/09/13/how-to-run-express.js-apps-with-netlify-functions/) is necessary.
 
 As the Cloudflare Workers are limited in CPU, script size and RAM, it is not possible to run a bundeled Nuxt server there. This is also communicated in the Cloudflare forums [here](https://community.cloudflare.com/t/vue-js-ssr-cloudflare-workers/218563/14). But there is light and the founder of Nuxt postet a [demo to nitro](https://github.com/nuxt/nitro-demo) which is a framework that bundels Nuxt apps for the edge, but this is not ready yet and not published, even if there are already nitro part in the current Nuxt deployments. Another promising framework is [Vitedge](https://github.com/frandiox/vitedge), that can be run on Cloudflare workers and and provides SSR features of Nuxt (tested: despite language-redirections). The ideal case would be to rethink `stale-while-revalidate` and give it some parameters like the timing. Then when a website is accessed first, the website is cached until the cache is revalidated. A cache revalidation could happen when content changes in the CMS. This way, SSR could be as performant like static with no additional workarounds. Vercel already provides features similar to this but generated the page on every access and at most every 1 sec etc. This is nearly the desired behaviour expect that a 10h or 100h could neither be implemented because not supported by the system, nor disrupted with a manual refresh when content changes before the end of the 100h are reached.
 
-### Miscellaneous
+## Miscellaneous
 After testing this out, it is necessary to cleanup Github, Netlify, Cloudlfare und adjust allowed URLs, domains and services.
 
-### Tests
+## Tests
 The Nuxt app from this repo was deployed on Cloudflare and Netlify and the measurements were taken manually using the Chrome network tab and approximated using 3-4 page refreshes.
 
 - Netlify functions redirect from root domain cold (after 10min): 600ms 

@@ -1,4 +1,6 @@
 import config from './config'
+import de from './lang/de'
+import en from './lang/en'
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -53,6 +55,47 @@ export default {
     Disallow: '/',
     Sitemap: config.hostname + '/sitemap.xml',
   },
+
+  router: {
+    trailingSlash: false
+  },
+
+  generate: {
+    // Important for static hosting with i18n to produce
+    // en.html files etc. so there is no trailing slash
+    // when served via simple services like Cloudflare Pages etc.
+    subFolders: false,
+
+    // Generate a 404 page as Cloudflare pages needs one
+    fallback: '404.html',
+  },
+
+  i18n: {
+    locales: [
+      {
+        code: 'de',
+        iso: 'de',
+        name: 'Deutsch'
+      },
+      {
+        code: 'en',
+        iso: 'en',
+        name: 'English'
+      }
+    ],
+    strategy: 'prefix',
+    // removing this can be tricky with dynamic i18n slug generation
+    defaultLocale: 'de',
+    vueI18n: {
+      fallbackLocale: 'en',
+      messages: { de, en }
+    },
+    seo: true,
+    baseUrl: config.hostname,
+    routesNameSeparator: config.routesNameSeparator
+  },
+
+
 
 
 
@@ -127,40 +170,6 @@ export default {
     }
   },*/
 
-  i18n: {
-    locales: [
-      {
-        code: 'de',
-        iso: 'de',
-        name: 'Deutsch'
-      },
-      {
-        code: 'en',
-        iso: 'en',
-        name: 'English'
-      }
-    ],
-    // redirection is not working when started with yarn start
-    strategy: 'prefix',
-    // TODO: remove this
-    defaultLocale: 'de',
-    vueI18n: {
-      fallbackLocale: 'en',
-      messages: {
-        de: {
-          welcome: 'Willkommen'
-        },
-        en: {
-          welcome: 'Welcome'
-        }
-      }
-    },
-    seo: true,
-    baseUrl: config.hostname,
-    routesNameSeparator: config.routesNameSeparator
-    // also custom links are possible
-  },
-
   sitemap: {
     hostname: config.hostname,
     i18n: true,
@@ -231,51 +240,4 @@ export default {
   pwa: {
     // TODO: lang manifest different languages?
   },
-
-
-
-  router: {
-    trailingSlash: false
-  },
-
-  generate: {
-    // Important for static hosting with i18n to produce
-    // en.html files etc. so there is no trailing slash
-    // when served via simple services like Cloudflare Pages etc.
-    subFolders: false,
-
-    // Generate a 404 page as Cloudflare pages needs one
-    fallback: '404.html',
-
-    routes() {
-      return new Promise((resolve, reject) => {
-        resolve([
-          {
-            route: 'blog/first-entry',
-            payload: {
-              cmsSlug: 'first-entry-cmd-slug',
-              deSlug: 'erster-eintrag',
-              enSlug: 'first-entry',
-              routeParams: {
-                de: { slug: 'erster-eintrag' },
-                en: { slug: 'first-entry' }
-              }
-            }
-          },
-          {
-            route: 'blog/second-entry',
-            payload: {
-              cmsSlug: 'second-entry-cmd-slug',
-              deSlug: 'zweiter-eintrag',
-              enSlug: 'second-entry',
-              routeParams: {
-                de: { slug: 'zweiter-eintrag' },
-                en: { slug: 'second-entry' }
-              }
-            }
-          },
-        ]);
-      });
-    }
-  }
 }

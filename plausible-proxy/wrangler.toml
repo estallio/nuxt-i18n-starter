@@ -1,4 +1,0 @@
-name = "plausible-proxy"
-type = "webpack"
-account_id = "***REMOVED***"
-workers_dev = true

@@ -1,14 +1,14 @@
 export default {
   // plausible analytics configuration
   plausible: {
-    domain: '***REMOVED***',
-    apiHost: '***REMOVED***plausible'
+    domain: '',
+    apiHost: ''
   },
   sanity: {
     // TODO: configure here or external like https://sanity.nuxtjs.org/getting-started/configuration
     projectId: 'myProject'
   },
   // baseURL of site
-  hostname: 'https://www.***REMOVED***',
+  hostname: '',
   routesNameSeparator: '___'
 }
