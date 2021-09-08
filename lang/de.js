@@ -3,6 +3,6 @@ export default {
   posts: 'Posts',
   about: 'About us',
   homepage: {
-    subtitle: 'nuxt-i18n demo'
+    subtitle: 'nuxt-i18n demo',
   },
 }

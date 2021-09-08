@@ -8,7 +8,9 @@ export const mutations = {
 }
 export const actions = {
   nuxtServerInit({ commit }) {
-    const posts = new Date().toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, "$1");
+    const posts = new Date()
+      .toTimeString()
+      .replace(/.*(\d{2}:\d{2}:\d{2}).*/, '$1')
     commit('STORE_POSTS', posts)
   },
 }

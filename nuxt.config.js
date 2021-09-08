@@ -9,19 +9,17 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     // Needed for previewing changed content
-    '~/plugins/preview.client.js'
+    '~/plugins/preview.client.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-  ],
+  css: [],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-  },
+  build: {},
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
@@ -34,16 +32,11 @@ export default {
     // https://sanity.nuxtjs.org
     '@nuxtjs/sanity/module',
     // https://github.com/moritzsternemann/vue-plausible
-    'vue-plausible'
+    'vue-plausible',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    '@nuxtjs/i18n',
-    '@nuxtjs/pwa',
-    '@nuxtjs/robots',
-    '@nuxtjs/sitemap'
-  ],
+  modules: ['@nuxtjs/i18n', '@nuxtjs/pwa', '@nuxtjs/robots', '@nuxtjs/sitemap'],
 
   plausible: config.plausible,
 
@@ -57,7 +50,7 @@ export default {
   },
 
   router: {
-    trailingSlash: false
+    trailingSlash: false,
   },
 
   generate: {
@@ -75,35 +68,25 @@ export default {
       {
         code: 'de',
         iso: 'de',
-        name: 'Deutsch'
+        name: 'Deutsch',
       },
       {
         code: 'en',
         iso: 'en',
-        name: 'English'
-      }
+        name: 'English',
+      },
     ],
     strategy: 'prefix',
     // removing this can be tricky with dynamic i18n slug generation
     defaultLocale: 'de',
     vueI18n: {
       fallbackLocale: 'en',
-      messages: { de, en }
+      messages: { de, en },
     },
     seo: true,
     baseUrl: config.hostname,
-    routesNameSeparator: config.routesNameSeparator
+    routesNameSeparator: config.routesNameSeparator,
   },
-
-
-
-
-
-
-
-
-
-
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   /*head () {
@@ -173,7 +156,7 @@ export default {
   sitemap: {
     hostname: config.hostname,
     i18n: true,
-    filter1 ({ routes }) {
+    filter1({ routes }) {
       // Problem: Nuxt generates default default localized pages like index.html or about.html even if
       // generation strategy is 'prefix'. For this reason, files like about.html or index.html are present
       // in the output directory and in the sitemap file. We don't want to include these files in the sitemap
@@ -188,8 +171,10 @@ export default {
       // behaviour even if it suits for one language
 
       // get the unlocalized index page and any localized one
-      const localizedIndexPage = routes.filter(route => route.name?.includes('index' + config.routesNameSeparator))[0]
-      const indexPage = routes.filter(route => route.name === 'index')[0]
+      const localizedIndexPage = routes.filter((route) =>
+        route.name?.includes('index' + config.routesNameSeparator)
+      )[0]
+      const indexPage = routes.filter((route) => route.name === 'index')[0]
 
       // push the unlocalized to the localized one
       // this works because all arrays and objects in the routes array are references
@@ -202,16 +187,22 @@ export default {
       indexPage.links = localizedIndexPage.links
 
       // filter out all unlocalized routes except the index page
-      return routes.filter(route => !route.name || route.name.includes(config.routesNameSeparator) || route.name.includes('index'))
+      return routes.filter(
+        (route) =>
+          !route.name ||
+          route.name.includes(config.routesNameSeparator) ||
+          route.name.includes('index')
+      )
     },
     routes: async () => {
-      return [{
-        url: '/de/blog/erster-eintrag',
-        links: [
-          { lang: 'de', url: `/de/blog/erster-eintrag` },
-          { lang: 'en', url: `/en/blog/first-entry` },
-        ],
-      },
+      return [
+        {
+          url: '/de/blog/erster-eintrag',
+          links: [
+            { lang: 'de', url: `/de/blog/erster-eintrag` },
+            { lang: 'en', url: `/en/blog/first-entry` },
+          ],
+        },
         {
           url: '/de/blog/zweiter-eintrag',
           links: [
@@ -232,8 +223,9 @@ export default {
             { lang: 'de', url: `/de/blog/zweiter-eintrag` },
             { lang: 'en', url: `/en/blog/second-entry` },
           ],
-        }];
-    }
+        },
+      ]
+    },
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
