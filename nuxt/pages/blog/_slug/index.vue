@@ -26,11 +26,14 @@ export default {
       },
     }),
   },
-  nuxtI18n: {
-    paths: {
-      en: '/about-us',
-      de: '/ueber-uns'
+  async asyncData ({ app, params, store, payload }) {
+    console.log('asyncData', params, payload);
+
+    if (payload?.routeParams) {
+      await store.dispatch('i18n/setRouteParams', payload.routeParams);
     }
+
+    return payload
   }
 }
 </script>

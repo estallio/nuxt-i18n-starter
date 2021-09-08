@@ -43,10 +43,9 @@ export default {
     '@nuxtjs/sitemap'
   ],
 
-  plausible: {
-    domain: '***REMOVED***',
-    apiHost: '***REMOVED***plausible'
-  },
+  plausible: config.plausible,
+
+  sanity: config.sanity,
 
   // https://github.com/nuxt-community/robots-module
   robots: {
@@ -64,7 +63,7 @@ export default {
 
 
   // Global page headers: https://go.nuxtjs.dev/config-head
-  head () {
+  /*head () {
     if (!this.$nuxtI18nHead) {
       return {
         htmlAttrs: {
@@ -126,24 +125,27 @@ export default {
       ],
     title: 'nuxt-i18n-test',
     }
-  },
+  },*/
 
   i18n: {
     locales: [
       {
         code: 'de',
+        iso: 'de',
         name: 'Deutsch'
       },
       {
         code: 'en',
+        iso: 'en',
         name: 'English'
       }
     ],
     // redirection is not working when started with yarn start
     strategy: 'prefix',
-    defaultLocale: 'en',
+    // TODO: remove this
+    defaultLocale: 'de',
     vueI18n: {
-      fallbackLocale: 'de',
+      fallbackLocale: 'en',
       messages: {
         de: {
           welcome: 'Willkommen'
@@ -155,14 +157,74 @@ export default {
     },
     seo: true,
     baseUrl: config.hostname,
+    routesNameSeparator: config.routesNameSeparator
     // also custom links are possible
   },
 
   sitemap: {
     hostname: config.hostname,
-    i18n: true
-    // generation problem: https://github.com/nuxt-community/sitemap-module/issues/91
-    // canonical link problem: https://i18n.nuxtjs.org/seo#feature-details
+    i18n: true,
+    filter1 ({ routes }) {
+      // Problem: Nuxt generates default default localized pages like index.html or about.html even if
+      // generation strategy is 'prefix'. For this reason, files like about.html or index.html are present
+      // in the output directory and in the sitemap file. We don't want to include these files in the sitemap
+      // so unlocalized files are filtered out at the bottom of this function. Requests to the generated files
+      // are blocked by a Cloudflare Worker that don't let access any other folder than 'en', 'de' or 'static'.
+      // The only page without language we want to be included in the sitemap is the index file. In this case
+      // we additionally want to index the location or language based redirect and tell Google about it via
+      // the 'x-default' entry in the sitemap. All the other paths are too difficult to x-default them because
+      // of localized slug generation. If localized slug generation should be turned off, this should be quite easy.
+      // But image an 'about-us' and 'ueber-uns' page. The default language in the browser is german - if the user
+      // types in /about-us it will be redirected to /de/about-us and gets a 404 - we don't want Google to index this
+      // behaviour even if it suits for one language
+
+      // get the unlocalized index page and any localized one
+      const localizedIndexPage = routes.filter(route => route.name?.includes('index' + config.routesNameSeparator))[0]
+      const indexPage = routes.filter(route => route.name === 'index')[0]
+
+      // push the unlocalized to the localized one
+      // this works because all arrays and objects in the routes array are references
+      localizedIndexPage.links.push({
+        lang: 'x-default',
+        url: indexPage.url,
+      })
+
+      // connect the localized and unlocalized index pages
+      indexPage.links = localizedIndexPage.links
+
+      // filter out all unlocalized routes except the index page
+      return routes.filter(route => !route.name || route.name.includes(config.routesNameSeparator) || route.name.includes('index'))
+    },
+    routes: async () => {
+      return [{
+        url: '/de/blog/erster-eintrag',
+        links: [
+          { lang: 'de', url: `/de/blog/erster-eintrag` },
+          { lang: 'en', url: `/en/blog/first-entry` },
+        ],
+      },
+        {
+          url: '/de/blog/zweiter-eintrag',
+          links: [
+            { lang: 'de', url: `/de/blog/zweiter-eintrag` },
+            { lang: 'en', url: `/en/blog/second-entry` },
+          ],
+        },
+        {
+          url: '/en/blog/first-entry',
+          links: [
+            { lang: 'de', url: `/de/blog/erster-eintrag` },
+            { lang: 'en', url: `/en/blog/first-entry` },
+          ],
+        },
+        {
+          url: '/en/blog/second-entry',
+          links: [
+            { lang: 'de', url: `/de/blog/zweiter-eintrag` },
+            { lang: 'en', url: `/en/blog/second-entry` },
+          ],
+        }];
+    }
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
@@ -170,10 +232,7 @@ export default {
     // TODO: lang manifest different languages?
   },
 
-  sanity: {
-    // TODO: configure here or external like https://sanity.nuxtjs.org/getting-started/configuration
-    projectId: 'myProject'
-  },
+
 
   router: {
     trailingSlash: false
@@ -182,9 +241,41 @@ export default {
   generate: {
     // Important for static hosting with i18n to produce
     // en.html files etc. so there is no trailing slash
-    // when provided via simple services like apache
+    // when served via simple services like Cloudflare Pages etc.
     subFolders: false,
-    // TODO: maybe we need some routes here like in https://github.com/miteyema/nuxt-i18n-demo/blob/prod/nuxt.config.js#L132
-    //  to overcome relative API calls
+
+    // Generate a 404 page as Cloudflare pages needs one
+    fallback: '404.html',
+
+    routes() {
+      return new Promise((resolve, reject) => {
+        resolve([
+          {
+            route: 'blog/first-entry',
+            payload: {
+              cmsSlug: 'first-entry-cmd-slug',
+              deSlug: 'erster-eintrag',
+              enSlug: 'first-entry',
+              routeParams: {
+                de: { slug: 'erster-eintrag' },
+                en: { slug: 'first-entry' }
+              }
+            }
+          },
+          {
+            route: 'blog/second-entry',
+            payload: {
+              cmsSlug: 'second-entry-cmd-slug',
+              deSlug: 'zweiter-eintrag',
+              enSlug: 'second-entry',
+              routeParams: {
+                de: { slug: 'zweiter-eintrag' },
+                en: { slug: 'second-entry' }
+              }
+            }
+          },
+        ]);
+      });
+    }
   }
 }
