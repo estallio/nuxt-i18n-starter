@@ -8,6 +8,8 @@ wasm-pack.log
 worker/
 .cargo-ok
 
+config.js
+
 # Created by .ignore support plugin (hsz.mobi)
 ### Node template
 # Logs
