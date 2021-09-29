@@ -235,4 +235,4 @@ More information about the usage of this directory in [the documentation](https:
 
 ## Contact
 :octocat: [@estallio](https://github.com/estallio)\
-:email: [leonhard.esterbauer@gmal.com](mailto:leonhard.esterbauer@gmail.com)
+:email: [leonhard.esterbauer@gmail.com](mailto:leonhard.esterbauer@gmail.com)
